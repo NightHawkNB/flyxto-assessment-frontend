@@ -1,5 +1,3 @@
-import { type FileRouter } from "uploadthing/types";
-
 export type Task = {
   id: string;
   title: string;
@@ -15,4 +13,7 @@ export type StateType = {
   data: undefined;
 }
 
-export type OurFileRouter = FileRouter;
+export type UpdateTaskRequest = {
+  id: string;
+  currentStatus: "todo" | "in_progress" | "done";
+}

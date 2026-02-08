@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.3",
+    "@react-email/components": "^1.0.7",
+    "@react-email/render": "^2.0.4",
     "@uploadthing/react": "^7.3.3",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "resend": "^6.9.1",
     "uploadthing": "^7.7.4"
   },
   "devDependencies": {
