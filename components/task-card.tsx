@@ -1,4 +1,5 @@
 import { Task } from "@/types/task";
+import DeleteTaskForm from "./delete-task-form";
 
 export default function TaskCard({ task }: { task: Task }) {
   return (
@@ -12,11 +13,15 @@ export default function TaskCard({ task }: { task: Task }) {
         )}
       </div>
 
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-medium`}
-      >
+      <span className={`px-3 py-1 rounded-full text-xs font-medium`}>
         {task.status}
       </span>
+      <div className="flex flex-col gap-2">
+        <DeleteTaskForm id={task.id} />
+        <a href={task.attachmentUrl} target="_blank">
+          <button type="button" className="bg-blue-500 text-white p-2 rounded hover:cursor-pointer">OPEN FILE</button>
+        </a>
+      </div>
     </div>
   );
 }
