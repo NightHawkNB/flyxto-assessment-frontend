@@ -69,7 +69,6 @@ export async function createTask(prevState: StateType, data: FormData) {
     return {
       isSuccess: true,
       message: "Task created successfully",
-      data: response.body,
     };
   }
 }
@@ -96,7 +95,6 @@ export async function deleteTask(prevState: StateType, data: FormData) {
     return {
       isSuccess: true,
       message: "Task deleted successfully",
-      data: response.body,
     };
   }
 }
@@ -152,7 +150,7 @@ async function sendMail(taskName: string) {
     });
 
     return data;
-    
+
   } catch (error) {
     console.error("Error sending email:", error);
     return null;

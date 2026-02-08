@@ -10,7 +10,7 @@ export type Task = {
 export type StateType = {
   isSuccess: boolean;
   message: string;
-  data: undefined;
+  data?: undefined;
 }
 
 export type UpdateTaskRequest = {
