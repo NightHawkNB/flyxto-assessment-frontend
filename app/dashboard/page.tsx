@@ -3,8 +3,12 @@ import TaskForm from "@/components/task-form";
 import { Task } from "@/types/task";
 import { Suspense } from "react";
 import Loading from "./loading";
+import UserDetails from "@/components/user-details";
 
 export default async function DashboardPage() {
+
+
+
   const tasks = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tasks`)
     .then((res) => res.json())
     .catch((err) => {
@@ -17,6 +21,7 @@ export default async function DashboardPage() {
       <main className="p-6 max-w-5xl mx-auto">
         <header className="mb-6">
           <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <UserDetails />
         </header>
 
         <TaskForm />

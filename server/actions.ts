@@ -3,7 +3,6 @@
 import { StateType } from "@/types/task";
 import { revalidatePath } from "next/cache";
 import TaskMarkedDoneEmail from "@/components/email-template";
-import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tasks`;
@@ -142,9 +141,14 @@ async function sendMail(taskName: string) {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
+    if(localStorage.getItem("userEmail") === "") {
+      console.warn("User email not found in localStorage. Skipping email notification.");
+      return null;
+    }
+
     const { data } = await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: "nipunbathiya1256@gmail.com",
+      to: localStorage.getItem("userEmail") || "",
       subject: `Task marked done: ${taskName}`,
       react: TaskMarkedDoneEmail({ taskName }),
     });
