@@ -100,6 +100,7 @@ export async function deleteTask(prevState: StateType, data: FormData) {
 export async function updateTaskStatus(prevState: StateType, data: FormData) {
   const id = data.get("id") as string;
   const status = data.get("status") as "todo" | "in_progress" | "done";
+  const userEmail = (data.get("userEmail") as string) || undefined;
 
   console.log("Updating task:", { id, status });
 
@@ -122,7 +123,7 @@ export async function updateTaskStatus(prevState: StateType, data: FormData) {
   try {
     if (status === "done") {
       const taskTitle = updatedTask?.title ?? "Untitled Task";
-      await sendMail(taskTitle);
+      await sendMail(taskTitle, userEmail);
     }
   } catch (err) {
     console.error("Failed to send notification email:", err);
@@ -137,18 +138,18 @@ export async function updateTaskStatus(prevState: StateType, data: FormData) {
   };
 }
 
-async function sendMail(taskName: string) {
+async function sendMail(taskName: string, userEmail?: string | null) {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
-    if(localStorage.getItem("userEmail") === "") {
-      console.warn("User email not found in localStorage. Skipping email notification.");
+    if (!userEmail) {
+      console.warn("sendMail: userEmail not provided. Skipping email notification.");
       return null;
     }
 
     const { data } = await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: localStorage.getItem("userEmail") || "",
+      to: userEmail,
       subject: `Task marked done: ${taskName}`,
       react: TaskMarkedDoneEmail({ taskName }),
     });

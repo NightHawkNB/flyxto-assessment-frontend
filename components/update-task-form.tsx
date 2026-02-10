@@ -2,8 +2,9 @@
 
 import { updateTaskStatus } from "@/server/actions";
 import { UpdateTaskRequest } from "@/types/task";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
+import { io, Socket } from "socket.io-client";
 
 export default function UpdateTaskForm ({ id, currentStatus }: Readonly<UpdateTaskRequest>) {
   const initialState = {
@@ -14,9 +15,17 @@ export default function UpdateTaskForm ({ id, currentStatus }: Readonly<UpdateTa
 
   const [state, formAction] = useActionState(updateTaskStatus, initialState);
 
+  useEffect(() => {
+    if (state.isSuccess) { 
+      const socket: Socket = io(`${process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000"}`);
+      socket.emit("task update", { id, status: currentStatus });
+    }
+  }, [state.isSuccess, currentStatus, id]);
+
   return (
     <form action={formAction}>
       <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="userEmail" value={localStorage.getItem("userEmail") || ""} />
       <StatusSelect currentStatus={currentStatus} isSuccess={state.isSuccess} />
     </form>
   );
